@@ -1,4 +1,6 @@
 @TestOn('browser')
+library;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:flutter/services.dart';

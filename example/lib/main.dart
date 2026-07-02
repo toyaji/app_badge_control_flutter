@@ -3,6 +3,11 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:app_badge_control_flutter/app_badge_control_flutter.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:js_interop';
+
+@JS('Notification.requestPermission')
+external JSPromise? _jsRequestPermission();
 
 void main() {
   runApp(const MyApp());
@@ -61,6 +66,36 @@ class _MyAppState extends State<MyApp> {
             child: Column(
               children: [
                 Text('Running on: $_platformVersion\n'),
+                if (kIsWeb) ...[
+                  ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        final promise = _jsRequestPermission();
+                        if (promise != null) {
+                          final result = await promise.toDart;
+                          final permissionStr = (result as JSString).toDart;
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Web notification permission: $permissionStr',
+                              ),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Permission request failed: $e'),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text('Request Web Notification Permission'),
+                  ),
+                  const SizedBox(height: 10),
+                ],
                 Text('Badge count: $_badgeCount\n'),
                 ElevatedButton(
                   onPressed: () async {
