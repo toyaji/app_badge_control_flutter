@@ -4,14 +4,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'app_badge_control_flutter'
-  s.version          = '0.0.1'
-  s.summary          = 'A new Flutter plugin project.'
+  s.version          = '0.1.0'
+  s.summary          = 'Flutter plugin for managing app icon badges.'
   s.description      = <<-DESC
-A new Flutter plugin project.
+Flutter plugin for managing app icon badges on macOS via the Dock tile badge.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/toyaji/app_badge_control_flutter'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'toyaji' => 'happytoday83@naver.com' }
 
   s.source           = { :path => '.' }
   s.source_files = 'app_badge_control_flutter/Sources/app_badge_control_flutter/**/*'

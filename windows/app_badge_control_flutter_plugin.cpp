@@ -107,15 +107,17 @@ HICON AppBadgeControlFlutterPlugin::CreateBadgeIcon(int count) {
   SetTextColor(hdcColor, RGB(255, 255, 255));
   SetBkMode(hdcColor, TRANSPARENT);
   
-  int fontHeight = (count > 99) ? 8 : ((count > 9) ? 10 : 12);
+  // Taskbar overlay icons conventionally show only one or two glyphs, so clamp
+  // 3+ digit counts to "99+" to keep them legible in the small (16px) icon.
+  std::wstring countStr = (count > 99) ? L"99+" : std::to_wstring(count);
+
+  int fontHeight = (countStr.length() > 2) ? 8 : ((countStr.length() > 1) ? 10 : 12);
   HFONT hFont = CreateFontW(
       fontHeight, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
       DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
       CLEARTYPE_QUALITY, VARIABLE_PITCH | FF_SWISS, L"Arial"
   );
   HGDIOBJ oldFont = SelectObject(hdcColor, hFont);
-  
-  std::wstring countStr = std::to_wstring(count);
   DrawTextW(hdcColor, countStr.c_str(), -1, &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
   
   SelectObject(hdcColor, oldFont);
@@ -200,8 +202,13 @@ void AppBadgeControlFlutterPlugin::HandleMethodCall(
     HWND hwnd = registrar_->GetView() ? registrar_->GetView()->GetNativeWindow() : nullptr;
     if (taskbar_list_ && hwnd) {
       CleanupIcon();
-      current_overlay_icon_ = CreateBadgeIcon(count);
-      taskbar_list_->SetOverlayIcon(hwnd, current_overlay_icon_, L"Notifications");
+      if (count <= 0) {
+        // Convention: 0 (or less) means "no badge", matching iOS/Web/macOS.
+        taskbar_list_->SetOverlayIcon(hwnd, NULL, NULL);
+      } else {
+        current_overlay_icon_ = CreateBadgeIcon(count);
+        taskbar_list_->SetOverlayIcon(hwnd, current_overlay_icon_, L"Notifications");
+      }
       result->Success();
     } else {
       result->Error("UNAVAILABLE", "Taskbar interface or Window Handle is unavailable");

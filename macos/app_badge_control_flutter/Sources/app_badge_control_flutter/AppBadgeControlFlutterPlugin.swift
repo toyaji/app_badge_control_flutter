@@ -14,10 +14,10 @@ public class AppBadgeControlFlutterPlugin: NSObject, FlutterPlugin {
       result("macOS " + ProcessInfo.processInfo.operatingSystemVersionString)
     case "updateBadgeCount":
       if let count = call.arguments as? Int {
-        NSApp.dockTile.badgeLabel = String(count)
+        NSApp.dockTile.badgeLabel = count > 0 ? String(count) : nil
         result(nil)
       } else if let countString = call.arguments as? String, let count = Int(countString) {
-        NSApp.dockTile.badgeLabel = String(count)
+        NSApp.dockTile.badgeLabel = count > 0 ? String(count) : nil
         result(nil)
       } else {
         result(FlutterError(code: "INVALID_ARGUMENT", message: "Count must be an integer", details: nil))

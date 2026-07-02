@@ -59,7 +59,7 @@ This plugin is inspired by and based on the [flutter_app_badger](https://github.
 | **Android** | Partial | Implemented via notification channels since Android has no official standalone badge API. Calling `removeBadge()` cancels notifications. |
 | **macOS** | Supported | Updates the Dock icon badge using `NSApp.dockTile.badgeLabel`. |
 | **Windows** | Supported | Implemented via **Taskbar Overlay Icons** using Win32 `ITaskbarList3::SetOverlayIcon`. Displays a red circle with the badge count overlaying the app's taskbar icon. |
-| **Web** | Supported | Uses the Web Badging API (`navigator.setAppBadge`). Mostly visible when the app is installed as a Progressive Web App (PWA). |
+| **Web** | Supported | Uses the Web Badging API (`navigator.setAppBadge`). Requires a **secure context** (HTTPS or `localhost`) and a **Chromium-based browser** (Chrome/Edge); Firefox and Safari are not supported. Mostly visible when the app is installed as a Progressive Web App (PWA). |
 
 ## Getting Started
 
@@ -85,6 +85,10 @@ No additional setup or permissions are required. Since standard Win32 desktop ap
 ### Web
 
 The Web Badging API (`navigator.setAppBadge`) relies on your app being installed as a **Progressive Web App (PWA)** and having **Notification Permissions**.
+
+> **Requirements & limitations:**
+> - **Secure context required.** The API is only exposed over **HTTPS** (or `localhost`). When served over plain HTTP, `navigator.setAppBadge` is undefined and `isAppBadgeSupported()` silently returns `false`.
+> - **Chromium-only.** The Badging API is currently supported by **Chrome and Edge (Chromium)** only. **Firefox and Safari do not support it**, so `isAppBadgeSupported()` returns `false` there.
 
 1. **Request Notification Permission**: You must request user permission before the badge can be shown on the dock/taskbar icon. Here is an example implementation using `dart:js_interop` (Dart 3.x compatible):
 
