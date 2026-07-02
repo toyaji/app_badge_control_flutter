@@ -81,7 +81,7 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () async {
                     bool isSupported =
                         await AppBadgeControlFlutter.isAppBadgeSupported();
-                    if (!mounted) return;
+                    if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('isSupported: $isSupported')),
                     );
