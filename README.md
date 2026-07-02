@@ -47,9 +47,19 @@ No native (Android/iOS) configuration changes are required — the native method
 
 ## Overview
 
-This plugin provides an easy way to control the badge count of your app's icon. It is compatible with both iOS and Android platforms. You can update the badge count, remove the badge, or check if badge support is available on the device.
+This plugin provides an easy way to control the badge count of your app's icon. It is compatible with iOS, Android, macOS, Windows, and Web. You can update the badge count, remove the badge, or check if badge support is available on the device.
 
 This plugin is inspired by and based on the [flutter_app_badger](https://github.com/g123k/flutter_app_badger) plugin.
+
+## Platform Behavior
+
+| Platform | Support Status | Implementation Details |
+| :--- | :--- | :--- |
+| **iOS** | Supported | Uses native iOS user notification settings. Requires permission request. |
+| **Android** | Partial | Implemented via notification channels since Android has no official standalone badge API. Calling `removeBadge()` cancels notifications. |
+| **macOS** | Supported | Updates the Dock icon badge using `NSApp.dockTile.badgeLabel`. |
+| **Windows** | Supported | Implemented via **Taskbar Overlay Icons** using Win32 `ITaskbarList3::SetOverlayIcon`. Displays a red circle with the badge count overlaying the app's taskbar icon. |
+| **Web** | Supported | Uses the Web Badging API (`navigator.setAppBadge`). Mostly visible when the app is installed as a Progressive Web App (PWA). |
 
 ## Getting Started
 
