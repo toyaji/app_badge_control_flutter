@@ -4,10 +4,9 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:app_badge_control_flutter/app_badge_control_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:js_interop';
 
-@JS('Notification.requestPermission')
-external JSPromise? _jsRequestPermission();
+import 'web_helper_stub.dart'
+    if (dart.library.js_interop) 'web_helper.dart';
 
 void main() {
   runApp(const MyApp());
@@ -70,19 +69,15 @@ class _MyAppState extends State<MyApp> {
                   ElevatedButton(
                     onPressed: () async {
                       try {
-                        final promise = _jsRequestPermission();
-                        if (promise != null) {
-                          final result = await promise.toDart;
-                          final permissionStr = (result as JSString).toDart;
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Web notification permission: $permissionStr',
-                              ),
+                        await requestWebNotificationPermission();
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Web notification permission requested.',
                             ),
-                          );
-                        }
+                          ),
+                        );
                       } catch (e) {
                         if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
