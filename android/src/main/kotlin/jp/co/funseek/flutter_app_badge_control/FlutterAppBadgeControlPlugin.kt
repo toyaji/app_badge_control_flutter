@@ -63,8 +63,12 @@ class FlutterAppBadgeControlPlugin: FlutterPlugin, MethodCallHandler {
 
     ensureBadgeChannel()
 
+    val appLabel = context.applicationInfo.loadLabel(context.packageManager)
+
     val notification = NotificationCompat.Builder(context, BADGE_CHANNEL_ID)
       .setSmallIcon(context.applicationInfo.icon)
+      .setContentTitle(appLabel)
+      .setContentText(count.toString())
       .setPriority(NotificationCompat.PRIORITY_MIN)
       .setNumber(count)
       .setSilent(true)

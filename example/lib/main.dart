@@ -17,6 +17,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
+  int _badgeCount = 0;
   final _flutterAppBadgeControlPlugin = FlutterAppBadgeControl();
 
   @override
@@ -59,14 +60,17 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             children: [
               Text('Running on: $_platformVersion\n'),
+              Text('Badge count: $_badgeCount\n'),
               ElevatedButton(
                 onPressed: () async {
-                  await FlutterAppBadgeControl.updateBadgeCount(1);
+                  setState(() => _badgeCount++);
+                  await FlutterAppBadgeControl.updateBadgeCount(_badgeCount);
                 },
-                child: const Text('Update Badge Count'),
+                child: const Text('Update Badge Count (+1)'),
               ),
               ElevatedButton(
                 onPressed: () async {
+                  setState(() => _badgeCount = 0);
                   await FlutterAppBadgeControl.removeBadge();
                 },
                 child: const Text('Remove Badge'),
