@@ -74,6 +74,45 @@ On Android, the plugin uses notification channels to manage app icon badges, as 
 
 For more information about notification channels on Android, please visit the [Android Developer Documentation](https://developer.android.com/develop/ui/views/notifications/channels).
 
+### macOS
+
+No additional setup or permissions are required. The plugin updates the Dock tile icon badge natively using `NSApp.dockTile.badgeLabel`.
+
+### Windows
+
+No additional setup or permissions are required. Since standard Win32 desktop apps do not support native icon badges, the plugin displays the badge count as a **Taskbar Overlay Icon** on the application's taskbar window.
+
+### Web
+
+The Web Badging API (`navigator.setAppBadge`) relies on your app being installed as a **Progressive Web App (PWA)** and having **Notification Permissions**.
+
+1. **Request Notification Permission**: You must request user permission before the badge can be shown on the dock/taskbar icon. Here is an example implementation using `dart:js_interop` (Dart 3.x compatible):
+
+```dart
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:js_interop';
+
+@JS('Notification.requestPermission')
+external JSPromise? _jsRequestPermission();
+
+Future<void> requestWebNotificationPermission() async {
+  if (kIsWeb) {
+    try {
+      final promise = _jsRequestPermission();
+      if (promise != null) {
+        final result = await promise.toDart;
+        final permissionStr = (result as JSString).toDart;
+        debugPrint('Notification Permission status: $permissionStr');
+      }
+    } catch (e) {
+      debugPrint('Failed to request permission: $e');
+    }
+  }
+}
+```
+
+2. **Run as PWA**: The application must be installed as a Progressive Web App (PWA) (via Chrome's/Edge's "Install" icon). The badge will be rendered on the standalone PWA's app launcher/dock icon rather than standard browser tabs.
+
 ## Usage
 
 To use the plugin, add the following import to your Dart file:
