@@ -89,6 +89,7 @@ The Web Badging API (`navigator.setAppBadge`) relies on your app being installed
 > **Requirements & limitations:**
 > - **Secure context required.** The API is only exposed over **HTTPS** (or `localhost`). When served over plain HTTP, `navigator.setAppBadge` is undefined and `isAppBadgeSupported()` silently returns `false`.
 > - **Chromium-only.** The Badging API is currently supported by **Chrome and Edge (Chromium)** only. **Firefox and Safari do not support it**, so `isAppBadgeSupported()` returns `false` there.
+> - **Windows/Edge count updates are unreliable.** On a PWA installed via Edge on Windows, `updateBadgeCount()` reliably turns the taskbar overlay badge on (first non-zero value) and off (`removeBadge()`), but subsequent calls with a different count while the badge is already showing may not visually update the overlay, even though the JS call resolves successfully with no error. This has been confirmed to be a limitation in Chromium's own Windows taskbar overlay rendering, not something this plugin's code controls (the plugin only forwards the exact count to `navigator.setAppBadge()`).
 
 1. **Request Notification Permission**: You must request user permission before the badge can be shown on the dock/taskbar icon. Here is an example implementation using `dart:js_interop` (Dart 3.x compatible):
 
@@ -154,6 +155,11 @@ Web Badging API relies heavily on browser permissions and operating system integ
 1. **Enable Notification Permissions**: Click the icon (lock or settings slider) on the left of the address bar inside your installed PWA window, and ensure **Notifications** are set to **Allow**.
 2. **Enable macOS System Settings**: Go to **System Settings** -> **Notifications** -> Find your PWA app in the list -> ensure **Badge app icon** is toggled **On**.
 3. **Standalone Mode Required**: The app icon badge will not be displayed on normal browser tabs. The web app must be installed and running as a Progressive Web App (PWA).
+
+### Windows/Edge Badge Count Stuck After First Update
+If the taskbar overlay badge appears once (e.g. shows "1") but never changes on later `updateBadgeCount()` calls, even though those calls succeed without throwing:
+* This is a known limitation of Chromium's Windows taskbar overlay implementation, not a bug in this plugin. Turning the badge on/off (`removeBadge()` then a fresh non-zero count) works reliably; updating the count while the badge is already visible does not reliably repaint the overlay.
+* There is no workaround available from the web/JS side today, since the plugin already forwards the exact count to `navigator.setAppBadge()` on every call.
 
 ### MissingPluginException on Web
 If you encounter `MissingPluginException` while calling badge control APIs on Web:
