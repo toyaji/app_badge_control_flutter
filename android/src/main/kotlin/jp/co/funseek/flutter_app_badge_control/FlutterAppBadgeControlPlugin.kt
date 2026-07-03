@@ -46,7 +46,8 @@ class FlutterAppBadgeControlPlugin: FlutterPlugin, MethodCallHandler {
         result.success(null)
       }
     } else if (call.method == "removeBadge") {
-      cancelBadgeNotification()
+      val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+      notificationManager.cancelAll()
       result.success(null)
     } else if (call.method == "isAppBadgeSupported") {
       result.success(isAppBadgeSupported())

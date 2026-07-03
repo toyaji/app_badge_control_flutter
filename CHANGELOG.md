@@ -1,3 +1,7 @@
+## 0.1.1
+
+* Fix `removeBadge()` on Android to clear all notifications to ensure the badge is completely removed.
+
 ## 0.1.0
 
 * Forked from [`flutter_app_badge_control`](https://github.com/funseek/flutter_app_badge_control) and republished as `app_badge_control_flutter`. See the README's "Why this fork exists" and "Migrating from `flutter_app_badge_control`" sections for details.

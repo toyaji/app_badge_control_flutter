@@ -23,7 +23,7 @@ Migration only requires a rename — the plugin's behavior and method signatures
      # remove
      # flutter_app_badge_control: ^0.0.3
      # add
-     app_badge_control_flutter: ^0.1.0
+     app_badge_control_flutter: ^0.1.1
    ```
 
 2. Update your imports:
@@ -55,8 +55,8 @@ This plugin is inspired by and based on the [flutter_app_badger](https://github.
 
 | Platform | Support Status | Implementation Details |
 | :--- | :--- | :--- |
-| **iOS** | Supported | Uses native iOS user notification settings. Requires permission request. |
-| **Android** | Supported | Tied to system notifications. Android lacks a direct, standalone badge API, so the plugin posts a silent, ongoing notification using `NotificationCompat.Builder.setNumber` to display the badge. |
+| **iOS** | Supported | Uses native iOS user notification settings. Requires permission request. **Note: `removeBadge()` does NOT clear existing notifications from the iOS Notification Center.** |
+| **Android** | Supported | Tied to system notifications. Android lacks a direct, standalone badge API, so the plugin posts a silent, ongoing notification using `NotificationCompat.Builder.setNumber` to display the badge. **Note: `removeBadge()` will clear ALL active notifications for the app to remove the badge.** <sup>[[1](#android-badge-details)]</sup> |
 | **macOS** | Supported | Updates the Dock icon badge using `NSApp.dockTile.badgeLabel`. |
 | **Windows** | Supported | Implemented via **Taskbar Overlay Icons** using Win32 `ITaskbarList3::SetOverlayIcon`. Displays a red circle with the badge count overlaying the app's taskbar icon. |
 | **Web** | Partial | Uses the Web Badging API (`navigator.setAppBadge`). Requires a **secure context** (HTTPS or `localhost`) and a **Chromium-based browser** (Chrome/Edge); Firefox and Safari are not supported. Mostly visible when the app is installed as a Progressive Web App (PWA). |
@@ -75,7 +75,13 @@ Android does not provide a native, direct API to update or clear the badge count
 
 Because of this system design, the plugin implements badge control as follows:
 * **`updateBadgeCount(count)`**: Posts a silent, ongoing notification in a dedicated notification channel (`flutter_app_badge_control_channel`) with `.setNumber(count)`.
-* **`removeBadge()`**: Cancels this specific notification, which removes the badge dot/number.
+* **`removeBadge()`**: Cancels all notifications for this app, which completely clears the badge dot/number.
+
+<a id="android-badge-details"></a>
+> [!IMPORTANT]
+> **Platform Differences for `removeBadge()`:**
+> - **iOS**: `removeBadge()` **does NOT delete** existing notifications from the iOS Notification Center. Only the app icon's red badge count is reset to 0.
+> - **Android**: Due to OS constraints where badges are tied directly to active notifications, calling `removeBadge()` **will clear ALL active notifications** for your app from the notification drawer to ensure the badge disappears.
 
 **Limitations:**
 1. **Launcher Dependent:** The appearance of the badge (whether it is a number or a simple dot) depends entirely on the device's launcher (e.g., Pixel Launcher displays a dot, while Samsung One UI can show numbers). Some custom launchers or custom ROMs may not support badges at all.
