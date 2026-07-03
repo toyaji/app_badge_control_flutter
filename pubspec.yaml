@@ -1,6 +1,6 @@
 name: app_badge_control_flutter
 description: Flutter plugin for managing app icon badges. It allows you to update or remove the badge count on both iOS and Android devices.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/toyaji/app_badge_control_flutter
 repository: https://github.com/toyaji/app_badge_control_flutter
 issue_tracker: https://github.com/toyaji/app_badge_control_flutter/issues

@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'app_badge_control_flutter'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'Flutter plugin for managing app icon badges.'
   s.description      = <<-DESC
 Flutter plugin for managing app icon badges on macOS via the Dock tile badge.
