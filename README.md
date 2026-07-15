@@ -23,7 +23,7 @@ Migration only requires a rename — the plugin's behavior and method signatures
      # remove
      # flutter_app_badge_control: ^0.0.3
      # add
-     app_badge_control_flutter: ^0.1.1
+     app_badge_control_flutter: ^0.1.2
    ```
 
 2. Update your imports:

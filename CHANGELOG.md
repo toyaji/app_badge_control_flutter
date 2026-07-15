@@ -1,3 +1,7 @@
+## 0.1.2
+
+* Upgrade `web` dependency to `^1.0.0` for modern Flutter packages compatibility.
+
 ## 0.1.1
 
 * Fix `removeBadge()` on Android to clear all notifications to ensure the badge is completely removed.
