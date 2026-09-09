@@ -1,3 +1,8 @@
+## 0.2.0
+
+* Updates the minimum supported SDK version to Flutter 3.44/Dart 3.12.
+* Migrates to built-in Kotlin (removes explicit Kotlin Gradle Plugin application).
+
 ## 0.1.2
 
 * Upgrade `web` dependency to `^1.0.0` for modern Flutter packages compatibility.

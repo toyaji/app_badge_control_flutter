@@ -1,5 +1,9 @@
 # app_badge_control_flutter
 
+[![pub package](https://img.shields.io/pub/v/app_badge_control_flutter.svg)](https://pub.dev/packages/app_badge_control_flutter)
+[![Platform](https://img.shields.io/badge/platform-flutter%20%7C%20android%20%7C%20ios%20%7C%20macos%20%7C%20windows%20%7C%20web-blue.svg)](https://pub.dev/packages/app_badge_control_flutter)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 `app_badge_control_flutter` is a Flutter plugin for managing app icon badges. It allows you to update or remove the badge count on both iOS and Android devices.
 
 ## Why this fork exists
@@ -23,7 +27,7 @@ Migration only requires a rename — the plugin's behavior and method signatures
      # remove
      # flutter_app_badge_control: ^0.0.3
      # add
-     app_badge_control_flutter: ^0.1.2
+     app_badge_control_flutter: ^0.2.0
    ```
 
 2. Update your imports:
